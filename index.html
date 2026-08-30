@@ -19,7 +19,9 @@
   .langSwitch{display:flex;gap:6px;}
   .langSwitch button{background:var(--panel);border:1px solid var(--line);color:var(--muted);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:13px;}
   .langSwitch button.on{color:var(--text);border-color:var(--accent);background:var(--panel2);}
-  .note{max-width:960px;margin:12px auto 0;padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-radius:10px;font-size:12.5px;color:var(--muted);}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px 4px 6px;border:1px solid var(--line);border-radius:999px;color:var(--muted);text-decoration:none;font-size:11.5px;margin-bottom:10px;}
+  .badge:hover{border-color:var(--accent);color:var(--text);}
+  .badge svg{border-radius:3px;flex-shrink:0;}
   main{max-width:960px;margin:20px auto 60px;padding:0 20px;}
 
   details.shelf{background:var(--panel);border:1px solid var(--line);border-radius:14px;margin-bottom:16px;}
@@ -64,6 +66,10 @@
 <header class="top">
   <div class="row">
     <div>
+      <a class="badge" href="https://co-pixel.qy2054315.chatgpt.site" target="_blank" rel="noopener">
+        <svg width="14" height="14" viewBox="0 0 4 4" xmlns="http://www.w3.org/2000/svg"><rect width="2" height="2" fill="#4982F4"/><rect x="2" width="2" height="2" fill="#8468E8"/><rect y="2" width="2" height="2" fill="#F078B8"/><rect x="2" y="2" width="2" height="2" fill="#64D387"/></svg>
+        <span data-t="badge">Co-Pixel 出品</span>
+      </a>
       <h1 data-t="title">免费在线像素头像制作器</h1>
       <p data-t="subtitle">选择原创模板，一格一格改成你的头像。完全在你的浏览器里运行，不联网、不注册，点击导出即可下载 PNG。</p>
     </div>
@@ -73,7 +79,6 @@
     </div>
   </div>
 </header>
-<div class="note" data-t="note">这是一个独立的静态页面，不属于共绘（Co-Pixel）多人实时画布产品的一部分，二者之间没有任何网络请求。你的画布内容只保存在本设备浏览器的 localStorage 中，刷新页面会自动恢复，清除浏览器数据会丢失。</div>
 
 <main>
   <details class="shelf" open>
@@ -143,7 +148,7 @@
   var strings = {
     title:["免费在线像素头像制作器","Free online pixel avatar maker"],
     subtitle:["选择原创模板，一格一格改成你的头像。完全在你的浏览器里运行，不联网、不注册，点击导出即可下载 PNG。","Choose an original template and edit it pixel by pixel. Runs entirely in your browser — no network, no signup. Export downloads a PNG."],
-    note:["这是一个独立的静态页面，不属于共绘（Co-Pixel）多人实时画布产品的一部分，二者之间没有任何网络请求。你的画布内容只保存在本设备浏览器的 localStorage 中，刷新页面会自动恢复，清除浏览器数据会丢失。","This is a standalone static page, separate from the Co-Pixel live multiplayer canvas — no network requests happen between them. Your canvas is saved only in this browser's localStorage; it auto-restores on reload but is lost if you clear browsing data."],
+    badge:["Co-Pixel 出品","By Co-Pixel"],
     shelfTitle:["示例模板","Templates"],
     shelfHint:["8 个原创像素角色，点击直接编辑","8 original pixel characters, click to edit"],
     nameLabel:["作品名称","Name"],
