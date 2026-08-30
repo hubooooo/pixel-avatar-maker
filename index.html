@@ -25,15 +25,26 @@
   main{max-width:960px;margin:20px auto 60px;padding:0 20px;}
 
   details.shelf{background:var(--panel);border:1px solid var(--line);border-radius:14px;margin-bottom:16px;}
-  details.shelf summary{list-style:none;cursor:pointer;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;}
+  details.shelf summary{list-style:none;cursor:pointer;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
   details.shelf summary::-webkit-details-marker{display:none;}
   .shelfBody{padding:0 16px 16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;}
+  .shelfBody.gallery{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));}
   .shelfBody button{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px;cursor:pointer;color:var(--text);display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;}
   .shelfBody button.on{border-color:var(--accent);}
   .shelfBody button b{font-size:12px;}
   .shelfBody button small{font-size:10.5px;color:var(--muted);}
   .thumb{display:grid;width:64px;aspect-ratio:1/1;overflow:hidden;border-radius:6px;border:1px solid var(--line);}
   .thumb i{display:block;}
+
+  .galleryAdd{background:var(--panel2);border:1px dashed var(--line);border-radius:10px;display:flex;align-items:center;justify-content:center;min-height:104px;cursor:pointer;color:var(--muted);font-size:12.5px;text-align:center;padding:8px;}
+  .galleryAdd:hover{border-color:var(--accent);color:var(--text);}
+  .galleryCard{position:relative;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;}
+  .galleryCard .loadArea{width:100%;background:none;border:none;color:var(--text);padding:0;font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;}
+  .galleryCard .loadArea b{font-size:12px;}
+  .galleryCard .loadArea small{font-size:10.5px;color:var(--muted);}
+  .galleryCard .delBtn{position:absolute;top:6px;right:6px;width:20px;height:20px;line-height:18px;padding:0;border-radius:50%;background:var(--panel);border:1px solid var(--line);color:var(--muted);cursor:pointer;font-size:12px;}
+  .galleryCard .delBtn:hover{color:#FF5A62;border-color:#FF5A62;}
+  .galleryEmpty{grid-column:1/-1;}
 
   .work{display:grid;grid-template-columns:260px 1fr;gap:18px;}
   @media (max-width:720px){.work{grid-template-columns:1fr;}}
@@ -49,17 +60,31 @@
   .palette{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
   .palette button{width:100%;aspect-ratio:1/1;border-radius:8px;border:2px solid var(--line);cursor:pointer;}
   .palette button.on{border-color:#fff;box-shadow:0 0 0 2px var(--accent);}
-  .toolRow{display:flex;gap:8px;}
-  .toolRow button{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px;color:var(--text);cursor:pointer;font-size:12.5px;}
+  .colorRow{display:flex;align-items:center;gap:8px;margin-top:8px;}
+  .swatch{width:28px;height:28px;border-radius:8px;border:2px solid var(--line);flex-shrink:0;}
+  .colorRow input[type=color]{flex:1;height:32px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);padding:2px;cursor:pointer;}
+  .toolRow{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .toolRow button{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px;color:var(--text);cursor:pointer;font-size:12.5px;}
   .toolRow button.on{border-color:var(--accent);color:#fff;}
-  .actionBtn{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:9px;color:var(--text);cursor:pointer;font-size:13px;}
+  .actionBtn{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:9px;color:var(--text);cursor:pointer;font-size:13px;width:100%;}
   .actionBtn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;font-weight:600;}
+  .actionBtn.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);}
+  .actionBtn:disabled{opacity:.4;cursor:not-allowed;}
+  .row2{display:flex;gap:8px;}
+  .row2 .actionBtn{flex:1;}
   .hint{font-size:11px;color:var(--muted);line-height:1.5;}
 
   .canvasArea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:12px;}
-  .miniCanvas{display:grid;border:1px solid var(--line);width:min(100%,480px);}
-  .miniCanvas div{aspect-ratio:1/1;cursor:crosshair;}
+  .zoomRow{display:flex;align-items:center;gap:8px;align-self:flex-end;font-size:12px;color:var(--muted);}
+  .zoomRow button{width:26px;height:26px;border-radius:6px;border:1px solid var(--line);background:var(--panel2);color:var(--text);cursor:pointer;font-size:14px;line-height:1;}
+  #zoomLabel{min-width:38px;text-align:center;}
+  .canvasScroll{max-width:100%;overflow:auto;border-radius:8px;}
+  .miniCanvas{display:grid;border:1px solid var(--line);}
+  .miniCanvas div{cursor:crosshair;}
   .canvasFooter{display:flex;justify-content:space-between;width:100%;font-size:12px;color:var(--muted);}
+
+  .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,12px);background:#000000cc;color:#fff;padding:10px 18px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:50;max-width:90vw;text-align:center;}
+  .toast.show{opacity:1;transform:translate(-50%,0);}
 </style>
 </head>
 <body>
@@ -86,6 +111,11 @@
     <div class="shelfBody" id="shelfBody"></div>
   </details>
 
+  <details class="shelf">
+    <summary><span><b data-t="gallerySectionTitle">我的存档</b></span><span data-t="galleryHint">最多保留 12 份，保存在本机浏览器 localStorage 中</span></summary>
+    <div class="shelfBody gallery" id="galleryBody"></div>
+  </details>
+
   <div class="work">
     <aside>
       <label data-t="nameLabel">作品名称
@@ -100,20 +130,40 @@
       <div>
         <div class="hint" data-t="colorLabel" style="margin-bottom:6px;">颜料颜色</div>
         <div class="palette" id="palette"></div>
+        <div class="colorRow">
+          <span class="swatch" id="currentSwatch"></span>
+          <input type="color" id="customColor" aria-label="Custom color" />
+        </div>
       </div>
 
       <div class="toolRow">
         <button id="toolPencil" class="on" data-t="pencil">✎ 画笔</button>
         <button id="toolEraser" data-t="eraser">◇ 橡皮</button>
+        <button id="toolFill" data-t="toolFill">▦ 填充</button>
+        <button id="toolEyedropper" data-t="toolEyedropper">◎ 取色</button>
+      </div>
+
+      <button class="actionBtn" id="mirrorBtn" data-t="mirrorLabel">↔ 镜像画笔</button>
+
+      <div class="row2">
+        <button class="actionBtn" id="undoBtn" data-t="undo">↶ 撤销</button>
+        <button class="actionBtn" id="redoBtn" data-t="redo">↷ 重做</button>
       </div>
 
       <button class="actionBtn" id="clearBtn" data-t="clear">清空画布</button>
+      <button class="actionBtn" id="saveGalleryBtn" data-t="saveGallery">💾 保存到本地图库</button>
+      <button class="actionBtn" id="shareBtn" data-t="shareBtn">🔗 复制分享链接</button>
       <button class="actionBtn primary" id="exportBtn" data-t="export">⇩ 导出 PNG 头像</button>
       <p class="hint" data-t="hint">个人画布无需锁区、不消耗颜料，文件只会在你点击导出时下载到本地。</p>
     </aside>
 
     <article class="canvasArea">
-      <div class="miniCanvas" id="miniCanvas"></div>
+      <div class="zoomRow">
+        <button id="zoomOut" type="button" aria-label="Zoom out">−</button>
+        <span id="zoomLabel">100%</span>
+        <button id="zoomIn" type="button" aria-label="Zoom in">+</button>
+      </div>
+      <div class="canvasScroll"><div class="miniCanvas" id="miniCanvas"></div></div>
       <div class="canvasFooter">
         <span id="pixelCount"></span>
         <b data-t="editedLocally">浏览器内即时编辑</b>
@@ -121,6 +171,8 @@
     </article>
   </div>
 </main>
+
+<div class="toast" id="toast"></div>
 
 <script>
 (function(){
@@ -151,11 +203,24 @@
     badge:["Co-Pixel 出品","By Co-Pixel"],
     shelfTitle:["示例模板","Templates"],
     shelfHint:["8 个原创像素角色，点击直接编辑","8 original pixel characters, click to edit"],
+    gallerySectionTitle:["我的存档","My saves"],
+    galleryHint:["最多保留 12 份，保存在本机浏览器 localStorage 中","Keeps up to 12 saves in this browser's localStorage"],
+    galleryAddCard:["+ 保存当前作品","+ Save current work"],
+    galleryEmpty:["还没有保存的作品，点左边的卡片保存一份","No saves yet — use the card on the left to save one"],
+    galleryDelete:["删除这份存档","Delete this save"],
+    galleryConfirmDelete:["确定删除这份存档吗？","Delete this save?"],
     nameLabel:["作品名称","Name"],
     colorLabel:["颜料颜色","Colors"],
     pencil:["✎ 画笔","✎ Pencil"],
     eraser:["◇ 橡皮","◇ Eraser"],
+    toolFill:["▦ 填充","▦ Fill"],
+    toolEyedropper:["◎ 取色","◎ Pick"],
+    mirrorLabel:["↔ 镜像画笔","↔ Mirror"],
+    undo:["↶ 撤销","↶ Undo"],
+    redo:["↷ 重做","↷ Redo"],
     clear:["清空画布","Clear canvas"],
+    saveGallery:["💾 保存到本地图库","💾 Save to gallery"],
+    shareBtn:["🔗 复制分享链接","🔗 Copy share link"],
     export:["⇩ 导出 PNG 头像","⇩ Export PNG avatar"],
     hint:["个人画布无需锁区、不消耗颜料，文件只会在你点击导出时下载到本地。","This canvas is free to use. Your image downloads locally only when you export it."],
     editedLocally:["浏览器内即时编辑","Edited in your browser"],
@@ -164,10 +229,21 @@
     changeSize:["更换规格","Change size"],
     pixelsWord:["像素","pixels"],
     exportedToast:["高清像素 PNG 已导出","High-resolution PNG exported"],
-    defaultTitle:["星际旅行员","Space Traveler"]
+    savedToGalleryToast:["已保存到本地图库","Saved to gallery"],
+    linkCopied:["分享链接已复制","Share link copied"],
+    linkInvalid:["分享链接无效或已过期","Invalid or expired share link"],
+    sharedLoaded:["已载入分享的作品，继续编辑会保存成你自己的草稿","Loaded a shared piece — further edits save as your own draft"],
+    copyManually:["复制这个链接分享给别人","Copy this link to share it"],
+    defaultTitle:["星际旅行员","Space Traveler"],
+    customTitle:["自定义作品","Custom avatar"]
   };
 
   var STORAGE_KEY = "pixel-avatar-maker-draft-v1";
+  var GALLERY_KEY = "pixel-avatar-maker-gallery-v1";
+  var GALLERY_LIMIT = 12;
+  var BASE_CELL = 14;
+  var MAX_SHARE_DIM = 96;
+  var HEX_RE = /^#[0-9A-Fa-f]{6}$/;
 
   function dot(base,size,x,y,c){ if(x>=0&&x<size&&y>=0&&y<size) base[y*size+x]=c; }
   function rect(base,size,x,y,w,h,c){ for(var yy=y;yy<y+h;yy++) for(var xx=x;xx<x+w;xx++) dot(base,size,xx,yy,c); }
@@ -194,12 +270,30 @@
     return out;
   }
 
+  function squareThumbCells(cells,width,height){
+    var side = Math.min(width,height);
+    var offsetX = Math.floor((width-side)/2), offsetY = Math.floor((height-side)/2);
+    var out = new Array(16*16);
+    for(var y=0;y<16;y++) for(var x=0;x<16;x++){
+      var sx = offsetX + Math.min(side-1, Math.floor(x/16*side));
+      var sy = offsetY + Math.min(side-1, Math.floor(y/16*side));
+      out[y*16+x] = cells[sy*width+sx];
+    }
+    return out;
+  }
+
   var state = {
     en:false, width:24, height:32, kind:"astronaut", title:strings.defaultTitle[0],
-    cells: sketchTemplate(24,32,"astronaut"), color: palette[0], tool:"pencil"
+    cells: sketchTemplate(24,32,"astronaut"), color: palette[0], tool:"pencil", mirror:false, zoom:100
   };
 
   function tr(key){ return strings[key][state.en?1:0]; }
+
+  function autoFitZoom(){
+    var maxDim = Math.max(state.width, state.height);
+    var fit = Math.round((420/(maxDim*BASE_CELL))*100/25)*25;
+    state.zoom = Math.max(50, Math.min(200, fit || 100));
+  }
 
   function loadDraft(){
     try{
@@ -220,16 +314,92 @@
     }catch(e){ /* storage unavailable or full — draft simply won't persist */ }
   }
 
+  function loadGallery(){
+    try{ var list = JSON.parse(localStorage.getItem(GALLERY_KEY) || "[]"); return Array.isArray(list) ? list : []; }
+    catch(e){ return []; }
+  }
+
+  function saveGalleryList(list){
+    try{ localStorage.setItem(GALLERY_KEY, JSON.stringify(list)); }catch(e){ /* storage unavailable or full */ }
+  }
+
+  function saveToGallery(){
+    var list = loadGallery();
+    list.unshift({
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+      title: state.title || tr("customTitle"),
+      width: state.width, height: state.height, kind: state.kind,
+      cells: state.cells.slice(), savedAt: Date.now()
+    });
+    if(list.length > GALLERY_LIMIT) list = list.slice(0, GALLERY_LIMIT);
+    saveGalleryList(list);
+    renderGallery();
+    toast(tr("savedToGalleryToast"));
+  }
+
+  function loadFromGallery(id){
+    var item = loadGallery().filter(function(i){ return i.id === id; })[0];
+    if(!item) return;
+    state.width = item.width; state.height = item.height; state.kind = item.kind || "blank";
+    state.cells = item.cells.slice(); state.title = item.title;
+    titleInput.value = state.title;
+    autoFitZoom();
+    renderAll(); saveDraft(); commitHistory();
+  }
+
+  function deleteFromGallery(id){
+    saveGalleryList(loadGallery().filter(function(i){ return i.id !== id; }));
+    renderGallery();
+  }
+
   var shelfBody = document.getElementById("shelfBody");
+  var galleryBody = document.getElementById("galleryBody");
   var sizeGrid = document.getElementById("sizeGrid");
   var sizeSummary = document.getElementById("sizeSummary");
   var paletteEl = document.getElementById("palette");
+  var currentSwatch = document.getElementById("currentSwatch");
+  var customColor = document.getElementById("customColor");
   var miniCanvas = document.getElementById("miniCanvas");
   var titleInput = document.getElementById("titleInput");
   var shelfActiveTitle = document.getElementById("shelfActiveTitle");
   var pixelCount = document.getElementById("pixelCount");
   var toolPencil = document.getElementById("toolPencil");
   var toolEraser = document.getElementById("toolEraser");
+  var toolFill = document.getElementById("toolFill");
+  var toolEyedropper = document.getElementById("toolEyedropper");
+  var mirrorBtn = document.getElementById("mirrorBtn");
+  var undoBtn = document.getElementById("undoBtn");
+  var redoBtn = document.getElementById("redoBtn");
+  var zoomLabel = document.getElementById("zoomLabel");
+  var toastEl = document.getElementById("toast");
+
+  var toastTimer = null;
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.classList.remove("show"); }, 2200);
+  }
+
+  var history = { stack: [], index: -1 };
+  function snapshot(){ return { width:state.width, height:state.height, kind:state.kind, cells:state.cells.slice() }; }
+  function commitHistory(){
+    history.stack = history.stack.slice(0, history.index+1);
+    history.stack.push(snapshot());
+    history.index = history.stack.length - 1;
+    if(history.stack.length > 60){ history.stack.shift(); history.index--; }
+    renderHistoryButtons();
+  }
+  function restoreSnapshot(snap){
+    state.width = snap.width; state.height = snap.height; state.kind = snap.kind; state.cells = snap.cells.slice();
+    renderShelf(); renderSizeGrid(); renderCanvas(); saveDraft();
+  }
+  function undo(){ if(history.index > 0){ history.index--; restoreSnapshot(history.stack[history.index]); renderHistoryButtons(); } }
+  function redo(){ if(history.index < history.stack.length-1){ history.index++; restoreSnapshot(history.stack[history.index]); renderHistoryButtons(); } }
+  function renderHistoryButtons(){
+    undoBtn.disabled = history.index <= 0;
+    redoBtn.disabled = history.index >= history.stack.length-1;
+  }
 
   function makeThumb(kind){
     var cells = sketchTemplate(16,16,kind);
@@ -237,6 +407,19 @@
     wrap.className = "thumb";
     wrap.style.gridTemplateColumns = "repeat(16,1fr)";
     cells.forEach(function(c){
+      var i = document.createElement("i");
+      i.style.background = c;
+      wrap.appendChild(i);
+    });
+    return wrap;
+  }
+
+  function makeThumbFromCells(cells,width,height){
+    var square = squareThumbCells(cells,width,height);
+    var wrap = document.createElement("div");
+    wrap.className = "thumb";
+    wrap.style.gridTemplateColumns = "repeat(16,1fr)";
+    square.forEach(function(c){
       var i = document.createElement("i");
       i.style.background = c;
       wrap.appendChild(i);
@@ -255,14 +438,50 @@
       var small = document.createElement("small"); small.textContent = (state.en ? item.genreEn : item.genre) + " · " + item.width + "×" + item.height;
       span.appendChild(b); span.appendChild(small);
       btn.appendChild(span);
-      var em = document.createElement("em"); // not styled specially, reuse small text via css? keep simple text node
       btn.appendChild(document.createTextNode(item.kind === state.kind ? tr("active") : tr("edit")));
       btn.addEventListener("click", function(){ newSketch(item.width, item.height, item.kind, state.en?item.titleEn:item.title); });
       shelfBody.appendChild(btn);
     });
-    shelfActiveTitle.textContent = state.en
-      ? ((sketchExamples.filter(function(i){return i.kind===state.kind;})[0]||{}).titleEn || "Blank canvas")
-      : ((sketchExamples.filter(function(i){return i.kind===state.kind;})[0]||{}).title || "自由像素画");
+    var match = sketchExamples.filter(function(i){ return i.kind === state.kind; })[0];
+    shelfActiveTitle.textContent = match ? (state.en ? match.titleEn : match.title) : (state.title || tr("customTitle"));
+  }
+
+  function renderGallery(){
+    var list = loadGallery();
+    galleryBody.innerHTML = "";
+    var addCard = document.createElement("button");
+    addCard.type = "button";
+    addCard.className = "galleryAdd";
+    addCard.textContent = tr("galleryAddCard");
+    addCard.addEventListener("click", saveToGallery);
+    galleryBody.appendChild(addCard);
+    if(!list.length){
+      var empty = document.createElement("div");
+      empty.className = "hint galleryEmpty";
+      empty.textContent = tr("galleryEmpty");
+      galleryBody.appendChild(empty);
+      return;
+    }
+    list.forEach(function(item){
+      var card = document.createElement("div");
+      card.className = "galleryCard";
+      var loadBtn = document.createElement("button");
+      loadBtn.type = "button";
+      loadBtn.className = "loadArea";
+      loadBtn.appendChild(makeThumbFromCells(item.cells, item.width, item.height));
+      var b = document.createElement("b"); b.textContent = item.title || tr("customTitle");
+      var small = document.createElement("small"); small.textContent = item.width + "×" + item.height;
+      loadBtn.appendChild(b); loadBtn.appendChild(small);
+      loadBtn.addEventListener("click", function(){ loadFromGallery(item.id); });
+      var delBtn = document.createElement("button");
+      delBtn.type = "button";
+      delBtn.className = "delBtn";
+      delBtn.textContent = "×";
+      delBtn.setAttribute("aria-label", tr("galleryDelete"));
+      delBtn.addEventListener("click", function(){ if(confirm(tr("galleryConfirmDelete"))) deleteFromGallery(item.id); });
+      card.appendChild(loadBtn); card.appendChild(delBtn);
+      galleryBody.appendChild(card);
+    });
   }
 
   function renderSizeGrid(){
@@ -288,43 +507,130 @@
       btn.addEventListener("click", function(){ state.color=c; state.tool="pencil"; renderPalette(); renderTools(); });
       paletteEl.appendChild(btn);
     });
+    currentSwatch.style.background = state.color;
+    if(HEX_RE.test(state.color)) customColor.value = state.color;
   }
 
   function renderTools(){
     toolPencil.classList.toggle("on", state.tool==="pencil");
     toolEraser.classList.toggle("on", state.tool==="eraser");
+    toolFill.classList.toggle("on", state.tool==="fill");
+    toolEyedropper.classList.toggle("on", state.tool==="eyedropper");
+    mirrorBtn.classList.toggle("on", state.mirror);
   }
 
   var dragging = false;
+  var strokeBefore = null;
+
   function renderCanvas(){
-    miniCanvas.style.gridTemplateColumns = "repeat("+state.width+",1fr)";
-    miniCanvas.style.width = Math.min(100, Math.max(62, state.width/state.height*100)) + "%";
+    var cellPx = BASE_CELL * (state.zoom/100);
+    miniCanvas.style.gridTemplateColumns = "repeat("+state.width+","+cellPx+"px)";
+    miniCanvas.style.width = (state.width*cellPx)+"px";
     miniCanvas.innerHTML = "";
     state.cells.forEach(function(c, i){
       var cell = document.createElement("div");
       cell.style.background = c;
-      cell.addEventListener("mousedown", function(){ dragging=true; drawSketch(i); });
-      cell.addEventListener("mouseenter", function(){ if(dragging) drawSketch(i); });
-      cell.addEventListener("touchstart", function(e){ e.preventDefault(); drawSketch(i); }, {passive:false});
+      cell.style.height = cellPx+"px";
+      cell.addEventListener("mousedown", function(){ handlePointerDown(i); });
+      cell.addEventListener("mouseenter", function(){ if(dragging) handlePointerMove(i); });
+      cell.addEventListener("touchstart", function(e){ e.preventDefault(); handlePointerDown(i); }, {passive:false});
       miniCanvas.appendChild(cell);
     });
     pixelCount.textContent = state.width + " × " + state.height + " · " + (state.width*state.height).toLocaleString() + " " + tr("pixelsWord");
+    zoomLabel.textContent = state.zoom + "%";
   }
-  document.addEventListener("mouseup", function(){ dragging=false; });
-  miniCanvas.addEventListener("mouseleave", function(){ dragging=false; });
 
-  function drawSketch(index){
-    state.cells[index] = state.tool==="eraser" ? "#FFFFFF" : state.color;
-    var cellEl = miniCanvas.children[index];
-    if(cellEl) cellEl.style.background = state.cells[index];
+  function handlePointerDown(index){
+    if(state.tool==="fill"){ floodFill(index); return; }
+    if(state.tool==="eyedropper"){ pickColor(index); return; }
+    strokeBefore = state.cells.slice();
+    dragging = true;
+    paintCell(index);
+  }
+
+  function handlePointerMove(index){
+    if(state.tool==="fill" || state.tool==="eyedropper") return;
+    paintCell(index);
+  }
+
+  function endStroke(){
+    if(dragging && strokeBefore){
+      var changed = false;
+      for(var i=0;i<state.cells.length;i++){ if(state.cells[i]!==strokeBefore[i]){ changed=true; break; } }
+      if(changed) commitHistory();
+    }
+    dragging = false;
+    strokeBefore = null;
+  }
+  document.addEventListener("mouseup", endStroke);
+  miniCanvas.addEventListener("mouseleave", endStroke);
+  miniCanvas.addEventListener("touchend", endStroke);
+  miniCanvas.addEventListener("touchcancel", endStroke);
+  miniCanvas.addEventListener("touchmove", function(e){
+    if(!dragging) return;
+    e.preventDefault();
+    var t = e.touches[0];
+    if(!t) return;
+    var el = document.elementFromPoint(t.clientX, t.clientY);
+    if(el && el.parentNode===miniCanvas){
+      var idx = Array.prototype.indexOf.call(miniCanvas.children, el);
+      if(idx>=0) handlePointerMove(idx);
+    }
+  }, {passive:false});
+
+  function setCell(index, value){
+    state.cells[index] = value;
+    var el = miniCanvas.children[index];
+    if(el) el.style.background = value;
+  }
+
+  function paintCell(index){
+    var value = state.tool==="eraser" ? "#FFFFFF" : state.color;
+    setCell(index, value);
+    if(state.mirror){
+      var x = index % state.width, y = Math.floor(index/state.width);
+      var mx = state.width-1-x;
+      if(mx!==x) setCell(y*state.width+mx, value);
+    }
     saveDraft();
+  }
+
+  function floodFill(index){
+    var target = state.cells[index];
+    var replacement = state.color;
+    if(target===replacement) return;
+    var w=state.width, h=state.height;
+    var visited = new Uint8Array(w*h);
+    var stack = [index];
+    while(stack.length){
+      var idx = stack.pop();
+      if(visited[idx] || state.cells[idx]!==target) continue;
+      visited[idx] = 1;
+      state.cells[idx] = replacement;
+      var x=idx%w, y=Math.floor(idx/w);
+      if(x>0) stack.push(idx-1);
+      if(x<w-1) stack.push(idx+1);
+      if(y>0) stack.push(idx-w);
+      if(y<h-1) stack.push(idx+w);
+    }
+    renderCanvas();
+    saveDraft();
+    commitHistory();
+  }
+
+  function pickColor(index){
+    state.color = state.cells[index];
+    state.tool = "pencil";
+    renderPalette();
+    renderTools();
   }
 
   function newSketch(width,height,kind,title){
     state.width=width; state.height=height; state.kind=kind; state.cells=sketchTemplate(width,height,kind);
-    state.title = title || (state.en ? "Custom avatar" : "自由像素画");
+    state.title = title || tr("customTitle");
     titleInput.value = state.title;
-    renderAll(); saveDraft();
+    autoFitZoom();
+    renderAll(); saveDraft(); commitHistory();
   }
 
   function resizeSketch(width,height){
@@ -337,12 +643,13 @@
       next[index] = previous[sourceY*oldWidth+sourceX] || "#FFFFFF";
     }
     state.width=width; state.height=height; state.cells=next;
-    renderAll(); saveDraft();
+    autoFitZoom();
+    renderAll(); saveDraft(); commitHistory();
   }
 
   function clearCanvas(){
     state.cells = sketchTemplate(state.width, state.height, state.kind);
-    renderCanvas(); saveDraft();
+    renderCanvas(); saveDraft(); commitHistory();
   }
 
   function downloadSketch(){
@@ -361,6 +668,42 @@
     link.download = safeName + ".png";
     link.href = canvas.toDataURL("image/png");
     link.click();
+    toast(tr("exportedToast"));
+  }
+
+  function encodeState(){
+    var paletteMap = {}, paletteArr = [];
+    var indices = state.cells.map(function(c){
+      if(!(c in paletteMap)){ paletteMap[c] = paletteArr.length; paletteArr.push(c); }
+      return paletteMap[c].toString(36);
+    }).join("");
+    var payload = { w:state.width, h:state.height, t:state.title, p:paletteArr, d:indices };
+    return btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+  }
+
+  function decodeState(b64){
+    try{
+      var payload = JSON.parse(decodeURIComponent(escape(atob(b64))));
+      if(!payload || !payload.w || !payload.h || !Array.isArray(payload.p) || typeof payload.d!=="string") return null;
+      if(payload.w<1 || payload.h<1 || payload.w>MAX_SHARE_DIM || payload.h>MAX_SHARE_DIM) return null;
+      if(payload.d.length !== payload.w*payload.h) return null;
+      var safePalette = payload.p.map(function(c){ return HEX_RE.test(c) ? c : "#FFFFFF"; });
+      var cells = [];
+      for(var i=0;i<payload.d.length;i++){
+        var idx = parseInt(payload.d[i],36);
+        cells.push(safePalette[idx] !== undefined ? safePalette[idx] : "#FFFFFF");
+      }
+      return { width:payload.w, height:payload.h, title: typeof payload.t==="string" ? payload.t.slice(0,40) : "", cells:cells };
+    }catch(e){ return null; }
+  }
+
+  function copyShareLink(){
+    var url = location.origin + location.pathname + "#s=" + encodeState();
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(function(){ toast(tr("linkCopied")); }).catch(function(){ window.prompt(tr("copyManually"), url); });
+    } else {
+      window.prompt(tr("copyManually"), url);
+    }
   }
 
   function applyStrings(){
@@ -376,23 +719,61 @@
   function renderAll(){
     applyStrings();
     renderShelf();
+    renderGallery();
     renderSizeGrid();
     renderPalette();
     renderTools();
     renderCanvas();
+    renderHistoryButtons();
   }
 
   document.getElementById("langZh").addEventListener("click", function(){ state.en=false; renderAll(); });
   document.getElementById("langEn").addEventListener("click", function(){ state.en=true; renderAll(); });
   toolPencil.addEventListener("click", function(){ state.tool="pencil"; renderTools(); });
   toolEraser.addEventListener("click", function(){ state.tool="eraser"; renderTools(); });
+  toolFill.addEventListener("click", function(){ state.tool="fill"; renderTools(); });
+  toolEyedropper.addEventListener("click", function(){ state.tool="eyedropper"; renderTools(); });
+  mirrorBtn.addEventListener("click", function(){ state.mirror=!state.mirror; renderTools(); });
+  undoBtn.addEventListener("click", undo);
+  redoBtn.addEventListener("click", redo);
   document.getElementById("clearBtn").addEventListener("click", clearCanvas);
+  document.getElementById("saveGalleryBtn").addEventListener("click", saveToGallery);
+  document.getElementById("shareBtn").addEventListener("click", copyShareLink);
   document.getElementById("exportBtn").addEventListener("click", downloadSketch);
+  document.getElementById("zoomIn").addEventListener("click", function(){ state.zoom = Math.min(300, state.zoom+25); renderCanvas(); });
+  document.getElementById("zoomOut").addEventListener("click", function(){ state.zoom = Math.max(50, state.zoom-25); renderCanvas(); });
+  customColor.addEventListener("input", function(){ state.color = customColor.value.toUpperCase(); state.tool="pencil"; renderPalette(); renderTools(); });
   titleInput.addEventListener("input", function(){ state.title = titleInput.value; saveDraft(); });
 
-  loadDraft();
+  document.addEventListener("keydown", function(e){
+    var tag = (document.activeElement && document.activeElement.tagName) || "";
+    if(tag==="INPUT" || tag==="TEXTAREA") return;
+    if(!(e.ctrlKey || e.metaKey)) return;
+    if(e.key==="z" || e.key==="Z"){ e.preventDefault(); if(e.shiftKey) redo(); else undo(); }
+    else if(e.key==="y" || e.key==="Y"){ e.preventDefault(); redo(); }
+  });
+
+  var loadedFrom = "template";
+  if(location.hash.indexOf("#s=")===0){
+    var shared = decodeState(location.hash.slice(3));
+    if(shared){
+      state.width=shared.width; state.height=shared.height; state.kind="shared";
+      state.title = shared.title || tr("customTitle");
+      state.cells = shared.cells;
+      loadedFrom = "shared";
+      try{ window.history.replaceState(null, "", location.pathname+location.search); }catch(e){}
+    } else {
+      loadedFrom = "invalid";
+    }
+  } else if(loadDraft()){
+    loadedFrom = "draft";
+  }
+  autoFitZoom();
   titleInput.value = state.title;
   renderAll();
+  commitHistory();
+  if(loadedFrom==="shared"){ saveDraft(); toast(tr("sharedLoaded")); }
+  else if(loadedFrom==="invalid"){ toast(tr("linkInvalid")); }
 })();
 </script>
 </body>
