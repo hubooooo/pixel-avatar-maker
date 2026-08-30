@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>像素头像制作器 · Pixel Avatar Maker</title>
+<meta name="description" content="免费在线像素头像制作工具，完全在浏览器本地运行，无需注册、无需网络、无需服务器。" />
+<style>
+  :root{
+    --bg:#0f1224; --panel:#171a33; --panel2:#1d2140; --line:#2b2f52; --text:#eef0ff; --muted:#9aa0c8;
+    --accent:#4982F4; --accent2:#8468E8;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;}
+  header.top{padding:28px 20px 8px;max-width:960px;margin:0 auto;}
+  header.top .row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;}
+  header.top h1{font-size:22px;margin:0 0 6px;}
+  header.top p{color:var(--muted);margin:0;font-size:14px;line-height:1.6;max-width:560px;}
+  .langSwitch{display:flex;gap:6px;}
+  .langSwitch button{background:var(--panel);border:1px solid var(--line);color:var(--muted);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:13px;}
+  .langSwitch button.on{color:var(--text);border-color:var(--accent);background:var(--panel2);}
+  .note{max-width:960px;margin:12px auto 0;padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-radius:10px;font-size:12.5px;color:var(--muted);}
+  main{max-width:960px;margin:20px auto 60px;padding:0 20px;}
+
+  details.shelf{background:var(--panel);border:1px solid var(--line);border-radius:14px;margin-bottom:16px;}
+  details.shelf summary{list-style:none;cursor:pointer;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;}
+  details.shelf summary::-webkit-details-marker{display:none;}
+  .shelfBody{padding:0 16px 16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;}
+  .shelfBody button{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px;cursor:pointer;color:var(--text);display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;}
+  .shelfBody button.on{border-color:var(--accent);}
+  .shelfBody button b{font-size:12px;}
+  .shelfBody button small{font-size:10.5px;color:var(--muted);}
+  .thumb{display:grid;width:64px;aspect-ratio:1/1;overflow:hidden;border-radius:6px;border:1px solid var(--line);}
+  .thumb i{display:block;}
+
+  .work{display:grid;grid-template-columns:260px 1fr;gap:18px;}
+  @media (max-width:720px){.work{grid-template-columns:1fr;}}
+  .work aside{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;height:fit-content;}
+  .work aside label{font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:6px;}
+  .work aside input[type=text]{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;color:var(--text);font-size:13px;}
+  details.sizePicker{border:1px solid var(--line);border-radius:10px;}
+  details.sizePicker summary{list-style:none;cursor:pointer;padding:10px 12px;font-size:13px;display:flex;justify-content:space-between;}
+  details.sizePicker summary::-webkit-details-marker{display:none;}
+  .sizeGrid{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:0 10px 10px;}
+  .sizeGrid button{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px;cursor:pointer;color:var(--text);font-size:11px;text-align:left;}
+  .sizeGrid button.on{border-color:var(--accent);}
+  .palette{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
+  .palette button{width:100%;aspect-ratio:1/1;border-radius:8px;border:2px solid var(--line);cursor:pointer;}
+  .palette button.on{border-color:#fff;box-shadow:0 0 0 2px var(--accent);}
+  .toolRow{display:flex;gap:8px;}
+  .toolRow button{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px;color:var(--text);cursor:pointer;font-size:12.5px;}
+  .toolRow button.on{border-color:var(--accent);color:#fff;}
+  .actionBtn{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:9px;color:var(--text);cursor:pointer;font-size:13px;}
+  .actionBtn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;font-weight:600;}
+  .hint{font-size:11px;color:var(--muted);line-height:1.5;}
+
+  .canvasArea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:12px;}
+  .miniCanvas{display:grid;border:1px solid var(--line);width:min(100%,480px);}
+  .miniCanvas div{aspect-ratio:1/1;cursor:crosshair;}
+  .canvasFooter{display:flex;justify-content:space-between;width:100%;font-size:12px;color:var(--muted);}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="row">
+    <div>
+      <h1 data-t="title">免费在线像素头像制作器</h1>
+      <p data-t="subtitle">选择原创模板，一格一格改成你的头像。完全在你的浏览器里运行，不联网、不注册，点击导出即可下载 PNG。</p>
+    </div>
+    <div class="langSwitch">
+      <button id="langZh" class="on">中</button>
+      <button id="langEn">EN</button>
+    </div>
+  </div>
+</header>
+<div class="note" data-t="note">这是一个独立的静态页面，不属于共绘（Co-Pixel）多人实时画布产品的一部分，二者之间没有任何网络请求。你的画布内容只保存在本设备浏览器的 localStorage 中，刷新页面会自动恢复，清除浏览器数据会丢失。</div>
+
+<main>
+  <details class="shelf" open>
+    <summary><span><b data-t="shelfTitle">示例模板</b> · <span id="shelfActiveTitle"></span></span><span data-t="shelfHint">8 个原创像素角色，点击直接编辑</span></summary>
+    <div class="shelfBody" id="shelfBody"></div>
+  </details>
+
+  <div class="work">
+    <aside>
+      <label data-t="nameLabel">作品名称
+        <input type="text" id="titleInput" maxlength="40" />
+      </label>
+
+      <details class="sizePicker">
+        <summary><span id="sizeSummary"></span><span>⌄</span></summary>
+        <div class="sizeGrid" id="sizeGrid"></div>
+      </details>
+
+      <div>
+        <div class="hint" data-t="colorLabel" style="margin-bottom:6px;">颜料颜色</div>
+        <div class="palette" id="palette"></div>
+      </div>
+
+      <div class="toolRow">
+        <button id="toolPencil" class="on" data-t="pencil">✎ 画笔</button>
+        <button id="toolEraser" data-t="eraser">◇ 橡皮</button>
+      </div>
+
+      <button class="actionBtn" id="clearBtn" data-t="clear">清空画布</button>
+      <button class="actionBtn primary" id="exportBtn" data-t="export">⇩ 导出 PNG 头像</button>
+      <p class="hint" data-t="hint">个人画布无需锁区、不消耗颜料，文件只会在你点击导出时下载到本地。</p>
+    </aside>
+
+    <article class="canvasArea">
+      <div class="miniCanvas" id="miniCanvas"></div>
+      <div class="canvasFooter">
+        <span id="pixelCount"></span>
+        <b data-t="editedLocally">浏览器内即时编辑</b>
+      </div>
+    </article>
+  </div>
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  var palette = ["#FF5A62", "#FFB23E", "#FFE05A", "#64D387", "#34BBC8", "#4982F4", "#8468E8", "#F078B8", "#FFFFFF", "#29263D"];
+
+  var sketchExamples = [
+    {kind:"astronaut",title:"星际旅行员",genre:"科幻电影风",titleEn:"Space Traveler",genreEn:"Sci-fi character",width:24,height:32},
+    {kind:"detective",title:"雨夜侦探",genre:"悬疑电影风",titleEn:"Rainy Detective",genreEn:"Mystery character",width:24,height:32},
+    {kind:"magical",title:"星光魔法师",genre:"动画幻想风",titleEn:"Starlight Mage",genreEn:"Fantasy character",width:24,height:32},
+    {kind:"hero",title:"红披风少年",genre:"热血动画风",titleEn:"Crimson Hero",genreEn:"Anime hero",width:24,height:32},
+    {kind:"robot",title:"薄荷机器人",genre:"复古科幻风",titleEn:"Mint Robot",genreEn:"Retro sci-fi",width:24,height:32},
+    {kind:"filmstar",title:"霓虹电影人",genre:"都市电影风",titleEn:"Neon Star",genreEn:"Urban character",width:24,height:32},
+    {kind:"cat",title:"紫月猫咪",genre:"萌系头像",titleEn:"Moon Cat",genreEn:"Cute avatar",width:24,height:24},
+    {kind:"heart",title:"爱心徽章",genre:"社交徽章",titleEn:"Heart Badge",genreEn:"Social badge",width:16,height:16}
+  ];
+
+  var sizePresets = [
+    [16,16,"迷你头像","Mini avatar"],[24,24,"标准头像","Standard avatar"],[32,32,"精细头像","Detailed avatar"],
+    [48,48,"高清头像","HD avatar"],[64,64,"超清头像","Ultra avatar"],[24,32,"角色立绘","Character"],
+    [32,24,"电影横幅","Banner"],[32,48,"长幅人物","Tall character"],[48,32,"场景卡片","Scene card"]
+  ];
+
+  var strings = {
+    title:["免费在线像素头像制作器","Free online pixel avatar maker"],
+    subtitle:["选择原创模板，一格一格改成你的头像。完全在你的浏览器里运行，不联网、不注册，点击导出即可下载 PNG。","Choose an original template and edit it pixel by pixel. Runs entirely in your browser — no network, no signup. Export downloads a PNG."],
+    note:["这是一个独立的静态页面，不属于共绘（Co-Pixel）多人实时画布产品的一部分，二者之间没有任何网络请求。你的画布内容只保存在本设备浏览器的 localStorage 中，刷新页面会自动恢复，清除浏览器数据会丢失。","This is a standalone static page, separate from the Co-Pixel live multiplayer canvas — no network requests happen between them. Your canvas is saved only in this browser's localStorage; it auto-restores on reload but is lost if you clear browsing data."],
+    shelfTitle:["示例模板","Templates"],
+    shelfHint:["8 个原创像素角色，点击直接编辑","8 original pixel characters, click to edit"],
+    nameLabel:["作品名称","Name"],
+    colorLabel:["颜料颜色","Colors"],
+    pencil:["✎ 画笔","✎ Pencil"],
+    eraser:["◇ 橡皮","◇ Eraser"],
+    clear:["清空画布","Clear canvas"],
+    export:["⇩ 导出 PNG 头像","⇩ Export PNG avatar"],
+    hint:["个人画布无需锁区、不消耗颜料，文件只会在你点击导出时下载到本地。","This canvas is free to use. Your image downloads locally only when you export it."],
+    editedLocally:["浏览器内即时编辑","Edited in your browser"],
+    active:["使用中","Active"],
+    edit:["编辑 →","Edit →"],
+    changeSize:["更换规格","Change size"],
+    pixelsWord:["像素","pixels"],
+    exportedToast:["高清像素 PNG 已导出","High-resolution PNG exported"],
+    defaultTitle:["星际旅行员","Space Traveler"]
+  };
+
+  var STORAGE_KEY = "pixel-avatar-maker-draft-v1";
+
+  function dot(base,size,x,y,c){ if(x>=0&&x<size&&y>=0&&y<size) base[y*size+x]=c; }
+  function rect(base,size,x,y,w,h,c){ for(var yy=y;yy<y+h;yy++) for(var xx=x;xx<x+w;xx++) dot(base,size,xx,yy,c); }
+
+  function sketchTemplate(width,height,kind){
+    var base = new Array(16*16).fill("#FFFFFF");
+    var d = function(x,y,c){ dot(base,16,x,y,c); };
+    var r = function(x,y,w,h,c){ rect(base,16,x,y,w,h,c); };
+    if(kind==="heart"){ [[5,4,2,1],[9,4,2,1],[4,5,8,3],[5,8,6,2],[6,10,4,2],[7,12,2,1]].forEach(function(a,i){ r(a[0],a[1],a[2],a[3], i<2?"#FFB23E":"#F078B8"); }); }
+    if(kind==="cat"){ r(4,5,8,7,"#8468E8"); r(4,3,2,3,"#8468E8"); r(10,3,2,3,"#8468E8"); r(5,7,2,2,"#FFE05A"); r(9,7,2,2,"#FFE05A"); d(6,8,"#29263D"); d(10,8,"#29263D"); r(7,10,2,1,"#F078B8"); }
+    if(kind==="astronaut"){ r(4,2,8,7,"#34BBC8"); r(5,3,6,4,"#172446"); r(6,4,4,2,"#4982F4"); r(5,9,6,5,"#FFFFFF"); r(7,10,2,2,"#FFB23E"); r(3,10,2,3,"#FFFFFF"); r(11,10,2,3,"#FFFFFF"); r(5,14,2,2,"#29263D"); r(9,14,2,2,"#29263D"); }
+    if(kind==="detective"){ r(3,3,10,2,"#29263D"); r(5,1,6,3,"#8468E8"); r(5,5,6,5,"#FFB78A"); r(5,6,6,1,"#29263D"); d(6,7,"#FFFFFF"); d(9,7,"#FFFFFF"); r(4,10,8,5,"#8A664E"); r(2,11,2,4,"#8A664E"); r(12,9,1,5,"#29263D"); r(13,8,2,2,"#34BBC8"); }
+    if(kind==="magical"){ r(4,2,8,7,"#8468E8"); r(5,4,6,5,"#FFD0B5"); d(6,6,"#29263D"); d(9,6,"#29263D"); r(5,9,6,2,"#F078B8"); r(4,11,8,4,"#8468E8"); r(2,6,1,8,"#FFB23E"); d(1,5,"#FFE05A"); d(2,4,"#FFE05A"); d(3,5,"#FFE05A"); }
+    if(kind==="hero"){ r(5,2,6,3,"#29263D"); r(5,5,6,4,"#FFD0B5"); d(6,6,"#29263D"); d(9,6,"#29263D"); r(4,9,7,5,"#4982F4"); r(3,9,2,6,"#FF5A62"); r(11,10,2,4,"#FF5A62"); r(6,10,3,2,"#FFE05A"); r(5,14,2,2,"#29263D"); r(9,14,2,2,"#29263D"); }
+    if(kind==="robot"){ d(8,1,"#FF5A62"); r(7,2,2,2,"#34BBC8"); r(4,4,8,6,"#34BBC8"); r(5,5,2,2,"#FFE05A"); r(9,5,2,2,"#FFE05A"); r(6,8,4,1,"#29263D"); r(5,10,6,4,"#64D387"); r(2,10,3,2,"#34BBC8"); r(11,10,3,2,"#34BBC8"); r(5,14,2,2,"#29263D"); r(9,14,2,2,"#29263D"); }
+    if(kind==="filmstar"){ r(4,2,8,4,"#F078B8"); r(5,5,6,5,"#FFD0B5"); r(5,6,3,2,"#29263D"); r(8,6,3,2,"#29263D"); r(4,10,8,5,"#29263D"); r(6,10,4,2,"#F078B8"); r(3,11,1,4,"#FFB23E"); r(12,11,1,4,"#FFB23E"); r(5,15,2,1,"#8468E8"); r(9,15,2,1,"#8468E8"); }
+    if(kind==="blank") return new Array(width*height).fill("#FFFFFF");
+    var side = Math.min(width,height), offsetX = Math.floor((width-side)/2), offsetY = Math.floor((height-side)/2);
+    var out = new Array(width*height).fill("#FFFFFF");
+    for(var y=0;y<side;y++) for(var x=0;x<side;x++){
+      var sx=Math.min(15,Math.floor(x/side*16)), sy=Math.min(15,Math.floor(y/side*16));
+      out[(offsetY+y)*width+offsetX+x] = base[sy*16+sx];
+    }
+    return out;
+  }
+
+  var state = {
+    en:false, width:24, height:32, kind:"astronaut", title:strings.defaultTitle[0],
+    cells: sketchTemplate(24,32,"astronaut"), color: palette[0], tool:"pencil"
+  };
+
+  function tr(key){ return strings[key][state.en?1:0]; }
+
+  function loadDraft(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return false;
+      var data = JSON.parse(raw);
+      if(!data || !Array.isArray(data.cells) || !data.width || !data.height) return false;
+      state.width = data.width; state.height = data.height; state.kind = data.kind || "blank";
+      state.title = typeof data.title === "string" ? data.title : state.title;
+      state.cells = data.cells;
+      return true;
+    }catch(e){ return false; }
+  }
+
+  function saveDraft(){
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({width:state.width,height:state.height,kind:state.kind,title:state.title,cells:state.cells}));
+    }catch(e){ /* storage unavailable or full — draft simply won't persist */ }
+  }
+
+  var shelfBody = document.getElementById("shelfBody");
+  var sizeGrid = document.getElementById("sizeGrid");
+  var sizeSummary = document.getElementById("sizeSummary");
+  var paletteEl = document.getElementById("palette");
+  var miniCanvas = document.getElementById("miniCanvas");
+  var titleInput = document.getElementById("titleInput");
+  var shelfActiveTitle = document.getElementById("shelfActiveTitle");
+  var pixelCount = document.getElementById("pixelCount");
+  var toolPencil = document.getElementById("toolPencil");
+  var toolEraser = document.getElementById("toolEraser");
+
+  function makeThumb(kind){
+    var cells = sketchTemplate(16,16,kind);
+    var wrap = document.createElement("div");
+    wrap.className = "thumb";
+    wrap.style.gridTemplateColumns = "repeat(16,1fr)";
+    cells.forEach(function(c){
+      var i = document.createElement("i");
+      i.style.background = c;
+      wrap.appendChild(i);
+    });
+    return wrap;
+  }
+
+  function renderShelf(){
+    shelfBody.innerHTML = "";
+    sketchExamples.forEach(function(item){
+      var btn = document.createElement("button");
+      if(item.kind === state.kind) btn.classList.add("on");
+      btn.appendChild(makeThumb(item.kind));
+      var span = document.createElement("span");
+      var b = document.createElement("b"); b.textContent = state.en ? item.titleEn : item.title;
+      var small = document.createElement("small"); small.textContent = (state.en ? item.genreEn : item.genre) + " · " + item.width + "×" + item.height;
+      span.appendChild(b); span.appendChild(small);
+      btn.appendChild(span);
+      var em = document.createElement("em"); // not styled specially, reuse small text via css? keep simple text node
+      btn.appendChild(document.createTextNode(item.kind === state.kind ? tr("active") : tr("edit")));
+      btn.addEventListener("click", function(){ newSketch(item.width, item.height, item.kind, state.en?item.titleEn:item.title); });
+      shelfBody.appendChild(btn);
+    });
+    shelfActiveTitle.textContent = state.en
+      ? ((sketchExamples.filter(function(i){return i.kind===state.kind;})[0]||{}).titleEn || "Blank canvas")
+      : ((sketchExamples.filter(function(i){return i.kind===state.kind;})[0]||{}).title || "自由像素画");
+  }
+
+  function renderSizeGrid(){
+    sizeGrid.innerHTML = "";
+    sizePresets.forEach(function(p){
+      var w=p[0], h=p[1], labelZh=p[2], labelEn=p[3];
+      var btn = document.createElement("button");
+      if(state.width===w && state.height===h) btn.classList.add("on");
+      btn.innerHTML = "<b>"+w+"×"+h+"</b><br><small>"+(state.en?labelEn:labelZh)+"</small>";
+      btn.addEventListener("click", function(){ resizeSketch(w,h); });
+      sizeGrid.appendChild(btn);
+    });
+    sizeSummary.textContent = state.width + " × " + state.height + " " + (state.en?"canvas":"画布");
+  }
+
+  function renderPalette(){
+    paletteEl.innerHTML = "";
+    palette.forEach(function(c){
+      var btn = document.createElement("button");
+      btn.style.background = c;
+      if(state.color===c) btn.classList.add("on");
+      btn.setAttribute("aria-label", c);
+      btn.addEventListener("click", function(){ state.color=c; state.tool="pencil"; renderPalette(); renderTools(); });
+      paletteEl.appendChild(btn);
+    });
+  }
+
+  function renderTools(){
+    toolPencil.classList.toggle("on", state.tool==="pencil");
+    toolEraser.classList.toggle("on", state.tool==="eraser");
+  }
+
+  var dragging = false;
+  function renderCanvas(){
+    miniCanvas.style.gridTemplateColumns = "repeat("+state.width+",1fr)";
+    miniCanvas.style.width = Math.min(100, Math.max(62, state.width/state.height*100)) + "%";
+    miniCanvas.innerHTML = "";
+    state.cells.forEach(function(c, i){
+      var cell = document.createElement("div");
+      cell.style.background = c;
+      cell.addEventListener("mousedown", function(){ dragging=true; drawSketch(i); });
+      cell.addEventListener("mouseenter", function(){ if(dragging) drawSketch(i); });
+      cell.addEventListener("touchstart", function(e){ e.preventDefault(); drawSketch(i); }, {passive:false});
+      miniCanvas.appendChild(cell);
+    });
+    pixelCount.textContent = state.width + " × " + state.height + " · " + (state.width*state.height).toLocaleString() + " " + tr("pixelsWord");
+  }
+  document.addEventListener("mouseup", function(){ dragging=false; });
+  miniCanvas.addEventListener("mouseleave", function(){ dragging=false; });
+
+  function drawSketch(index){
+    state.cells[index] = state.tool==="eraser" ? "#FFFFFF" : state.color;
+    var cellEl = miniCanvas.children[index];
+    if(cellEl) cellEl.style.background = state.cells[index];
+    saveDraft();
+  }
+
+  function newSketch(width,height,kind,title){
+    state.width=width; state.height=height; state.kind=kind; state.cells=sketchTemplate(width,height,kind);
+    state.title = title || (state.en ? "Custom avatar" : "自由像素画");
+    titleInput.value = state.title;
+    renderAll(); saveDraft();
+  }
+
+  function resizeSketch(width,height){
+    var oldWidth=state.width, oldHeight=state.height, previous=state.cells;
+    var next = new Array(width*height);
+    for(var index=0;index<next.length;index++){
+      var x=index%width, y=Math.floor(index/width);
+      var sourceX=Math.min(oldWidth-1, Math.floor(x/width*oldWidth));
+      var sourceY=Math.min(oldHeight-1, Math.floor(y/height*oldHeight));
+      next[index] = previous[sourceY*oldWidth+sourceX] || "#FFFFFF";
+    }
+    state.width=width; state.height=height; state.cells=next;
+    renderAll(); saveDraft();
+  }
+
+  function clearCanvas(){
+    state.cells = sketchTemplate(state.width, state.height, state.kind);
+    renderCanvas(); saveDraft();
+  }
+
+  function downloadSketch(){
+    var scale = Math.max(1, Math.floor(512/Math.max(state.width,state.height)));
+    var canvas = document.createElement("canvas");
+    canvas.width = state.width*scale; canvas.height = state.height*scale;
+    var ctx = canvas.getContext("2d");
+    if(!ctx) return;
+    ctx.imageSmoothingEnabled = false;
+    state.cells.forEach(function(cell,index){
+      ctx.fillStyle = cell;
+      ctx.fillRect((index%state.width)*scale, Math.floor(index/state.width)*scale, scale, scale);
+    });
+    var link = document.createElement("a");
+    var safeName = (state.title||"").replace(/[\\/:*?"<>|]/g,"-") || (state.en?"pixel-avatar":"像素头像");
+    link.download = safeName + ".png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  }
+
+  function applyStrings(){
+    document.documentElement.lang = state.en ? "en" : "zh-CN";
+    document.querySelectorAll("[data-t]").forEach(function(el){
+      var key = el.getAttribute("data-t");
+      if(strings[key]) el.textContent = tr(key);
+    });
+    document.getElementById("langZh").classList.toggle("on", !state.en);
+    document.getElementById("langEn").classList.toggle("on", state.en);
+  }
+
+  function renderAll(){
+    applyStrings();
+    renderShelf();
+    renderSizeGrid();
+    renderPalette();
+    renderTools();
+    renderCanvas();
+  }
+
+  document.getElementById("langZh").addEventListener("click", function(){ state.en=false; renderAll(); });
+  document.getElementById("langEn").addEventListener("click", function(){ state.en=true; renderAll(); });
+  toolPencil.addEventListener("click", function(){ state.tool="pencil"; renderTools(); });
+  toolEraser.addEventListener("click", function(){ state.tool="eraser"; renderTools(); });
+  document.getElementById("clearBtn").addEventListener("click", clearCanvas);
+  document.getElementById("exportBtn").addEventListener("click", downloadSketch);
+  titleInput.addEventListener("input", function(){ state.title = titleInput.value; saveDraft(); });
+
+  loadDraft();
+  titleInput.value = state.title;
+  renderAll();
+})();
+</script>
+</body>
+</html>
